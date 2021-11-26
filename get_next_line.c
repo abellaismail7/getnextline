@@ -67,10 +67,21 @@ int is_line(char *str)
 	while(str[i])
 	{
 		if(str[i] == '\n')
-			return i;
+			return i + 1;
 		i++;
 	}
 	return 0;
+}
+
+char * get_line(char **s, int len)
+{
+	char *str;
+
+	str =  malloc(sizeof(char) * (len + 1));
+	ft_strlcpy(str, *s, len + 1);
+	**s = 0;
+	*s = ft_strjoin(*s,*s + len);
+	return str;
 }
 
 char *get_next_line(int fd)
@@ -89,14 +100,16 @@ char *get_next_line(int fd)
 			free(buf);
 			return 0;
 		}
+		if(size == 0)
+		{
+			return str;
+		}
 		buf[size] = 0;
 		str = ft_strjoin(str, buf);
 		index = is_line(str);
 		if(index || (size == 0 && index == 0))
 		{
-			str = str + index;
-			return str - index;
-			return str;
+			return get_line(&str, index);
 		}
 	}
 	return 0;
@@ -111,6 +124,7 @@ int main()
 	char * str;
 	while((str = get_next_line(fd)))
 	{
+		write(1, "\n\n", 2);
 		write(1, str, ft_strlen(str));
 	}
 
