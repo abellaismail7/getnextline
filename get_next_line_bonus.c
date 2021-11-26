@@ -1,3 +1,4 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -38,6 +39,7 @@ void	ft_strlcpy(char *dest, const char *src, size_t size)
 		i++;
 	}
 	dest[i] = 0;
+	return ;
 }
 
 char	*ft_strjoin(char *s1, char *s2)
@@ -90,7 +92,7 @@ char * get_line(char **s, int len)
 char *get_next_line(int fd)
 {
 	char *buf;
-	static char *str = 0;
+	static char *str[4096] = {0};
 	int size;
 	int index;
 
@@ -104,23 +106,23 @@ char *get_next_line(int fd)
 			break ;
 		if(size == 0)
 		{
-			if(!str)
+			if(!str[fd])
 				break;	
-			else if(str && *str == 0)
+			else if(str[fd] && *str == 0)
 			{
-				free(str);
+				free(str[fd]);
 				break;
 			}
 		}
 		buf[size] = 0;
-		str = ft_strjoin(str, buf);
-		index = is_line(str);
+		str[fd] = ft_strjoin(str[fd], buf);
+		index = is_line(str[fd]);
 		if (size == 0 && index == 0)
-			index = ft_strlen(str);
+			index = ft_strlen(str[fd]);
 		if(index)
 		{
 			free(buf);
-			return get_line(&str, index);
+			return get_line(str + fd, index);
 		}
 	}
 	free(buf);
