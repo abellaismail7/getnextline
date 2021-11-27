@@ -14,6 +14,12 @@
 #include <unistd.h>
 #include "get_next_line_bonus.h"
 
+int	ft_free(void *p)
+{
+	free(p);
+	return (1);
+}
+
 char	*get_next_line(int fd)
 {
 	char		*buf;
@@ -29,34 +35,14 @@ char	*get_next_line(int fd)
 		size = read(fd, buf, BUFFER_SIZE);
 		if (size == -1 || (size == 0 && str[fd] == 0))
 			break ;
-		if (size == 0 && str[fd] && *str[fd] == 0)
-		{
-			free(str[fd]);
+		if (size == 0 && str[fd] && *str[fd] == 0 && ft_free(str[fd]))
 			break ;
-		}
 		buf[size] = 0;
 		str[fd] = ft_strjoin(str[fd], buf);
 		index = is_line(str[fd], size);
-		if (index)
-		{
-			free(buf);
+		if (index && ft_free(buf))
 			return (get_line(str + fd, index));
-		}
 	}
 	free(buf);
 	return (0);
 }
-
-//#include<fcntl.h>
-//#include<unistd.h>
-//
-//int main()
-//{
-//	int fd = open("test.txt", O_RDONLY | O_CREAT);
-//	char * str;
-//	while((str = get_next_line(fd)))
-//	{
-//		write(1, ">>", 2);
-//		write(1, str, ft_strlen(str));
-//	}
-//}
