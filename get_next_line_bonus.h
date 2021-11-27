@@ -17,6 +17,12 @@
 # define BUFFER_SIZE 1
 # endif
 
+# include <stddef.h>
 char *get_next_line(int fd);
+void	ft_strlcpy(char *dest, const char *src, size_t size);
+char	*ft_strjoin(char *s1, char *s2);
+int	ft_strlen(const char *str);
+int	is_line(char *str, int size);
+char	*get_line(char **s, int len);
 
 #endif
